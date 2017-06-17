@@ -347,6 +347,20 @@ intermediate_sql=# SELECT * FROM items;
   7 | arugula salad        |    1100 |         2
 (7 rows)
 
+intermediate_sql=# SELECT items.name, categories.name FROM items
+INNER JOIN item_categories
+ON items.id = item_categories.item_id
+INNER JOIN categories
+ON categories.id = item_categories.category_id
+WHERE items.name='arugula salad';
+     name      |    name
+---------------+------------
+ arugula salad | side
+ arugula salad | dinner
+ arugula salad | lunch
+ arugula salad | vegetarian
+(4 rows)
+
 intermediate_sql=# SELECT items.name AS item_name, categories.name AS category_name FROM items
 INNER JOIN item_categories
 ON items.id = item_categories.item_id
@@ -360,3 +374,114 @@ WHERE items.name='arugula salad';
  arugula salad | lunch
  arugula salad | vegetarian
 (4 rows)
+
+intermediate_sql=# INSERT INTO items(name, revenue, season_id)
+VALUES ('italian beef', 600, NULL),
+('cole slaw', 150, NULL),
+('ice cream sandwich', 700, NULL);
+
+INSERT 0 3
+
+intermediate_sql=# SELECT i.name items, s.name seasons
+intermediate_sql-# FROM items i
+intermediate_sql-# INNER JOIN seasons s
+intermediate_sql-# ON i.season_id = s.id;
+        items         | seasons
+----------------------+---------
+ hot dog              | summer
+ veggie lasagna       | summer
+ striped bass         | summer
+ burger               | summer
+ arugula salad        | autumn
+ lobster mac n cheese | winter
+ grilled cheese       | spring
+(7 rows)
+
+#### This query uses aliases for items (i) and seasons (s) to make it cleaner. Also it is not necessary to use AS to name the column headings.
+
+intermediate_sql=# SELECT * FROM items i
+intermediate_sql-# LEFT OUTER JOIN seasons s
+intermediate_sql-# ON i.season_id = s.id;
+ id |         name         | revenue | season_id | id |  name
+----+----------------------+---------+-----------+----+--------
+  6 | hot dog              |    1000 |         1 |  1 | summer
+  2 | veggie lasagna       |    1000 |         1 |  1 | summer
+  3 | striped bass         |     500 |         1 |  1 | summer
+  4 | burger               |    2000 |         1 |  1 | summer
+  7 | arugula salad        |    1100 |         2 |  2 | autumn
+  1 | lobster mac n cheese |    1200 |         3 |  3 | winter
+  5 | grilled cheese       |     800 |         4 |  4 | spring
+  8 | italian beef         |     600 |           |    |
+  9 | cole slaw            |     150 |           |    |
+ 10 | ice cream sandwich   |     700 |           |    |
+(10 rows)
+
+intermediate_sql=# SELECT * FROM items
+intermediate_sql-# LEFT OUTER JOIN seasons
+intermediate_sql-# ON items.season_id = seasons.id;
+ id |         name         | revenue | season_id | id |  name
+----+----------------------+---------+-----------+----+--------
+  6 | hot dog              |    1000 |         1 |  1 | summer
+  2 | veggie lasagna       |    1000 |         1 |  1 | summer
+  3 | striped bass         |     500 |         1 |  1 | summer
+  4 | burger               |    2000 |         1 |  1 | summer
+  7 | arugula salad        |    1100 |         2 |  2 | autumn
+  1 | lobster mac n cheese |    1200 |         3 |  3 | winter
+  5 | grilled cheese       |     800 |         4 |  4 | spring
+  8 | italian beef         |     600 |           |    |
+  9 | cole slaw            |     150 |           |    |
+ 10 | ice cream sandwich   |     700 |           |    |
+(10 rows)
+
+##### A left outer join will return all records from the left table(items) and return matching records from the right table(seasons).
+
+intermediate_sql=# SELECT * FROM seasons s
+intermediate_sql-# RIGHT OUTER JOIN items i
+intermediate_sql-# ON i.id = s.id
+intermediate_sql-# ;
+ id |  name  | id |         name         | revenue | season_id
+----+--------+----+----------------------+---------+-----------
+  1 | summer |  1 | lobster mac n cheese |    1200 |         3
+  2 | autumn |  2 | veggie lasagna       |    1000 |         1
+  3 | winter |  3 | striped bass         |     500 |         1
+  4 | spring |  4 | burger               |    2000 |         1
+    |        |  5 | grilled cheese       |     800 |         4
+    |        |  6 | hot dog              |    1000 |         1
+    |        |  7 | arugula salad        |    1100 |         2
+    |        |  8 | italian beef         |     600 |
+    |        |  9 | cole slaw            |     150 |
+    |        | 10 | ice cream sandwich   |     700 |
+(10 rows)
+
+intermediate_sql=# SELECT * FROM items
+intermediate_sql-# WHERE revenue > (SELECT AVG(revenue) FROM items);
+ id |         name         | revenue | season_id
+----+----------------------+---------+-----------
+  1 | lobster mac n cheese |    1200 |         3
+  2 | veggie lasagna       |    1000 |         1
+  4 | burger               |    2000 |         1
+  6 | hot dog              |    1000 |         1
+  7 | arugula salad        |    1100 |         2
+(5 rows)
+
+intermediate_sql=# SELECT * FROM items
+WHERE revenue < (SELECT avg(revenue) FROM items);
+ id |        name        | revenue | season_id
+----+--------------------+---------+-----------
+  3 | striped bass       |     500 |         1
+  5 | grilled cheese     |     800 |         4
+  8 | italian beef       |     600 |
+  9 | cole slaw          |     150 |
+ 10 | ice cream sandwich |     700 |
+(5 rows)
+
+
+### Write a query that returns the sum of all items that have a category of dinner.
+
+intermediate_sql=# SELECT sum(revenue) FROM items i
+intermediate_sql-# INNER JOIN item_categories
+intermediate_sql-# ON i.id = item_categories.item_id;
+  sum
+-------
+ 11700
+(1 row)
