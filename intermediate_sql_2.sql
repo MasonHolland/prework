@@ -126,3 +126,135 @@ intermediate_sql-#        (20, 11, 89),
 intermediate_sql-#        (20, 3, 98);
 
 INSERT 0 37
+
+
+
+######  List all the students and their classes
+
+intermediate_sql=# SELECT s.name, c.name FROM students s
+                   INNER JOIN enrollments e
+                   ON s.id = e.student_id
+                   INNER JOIN classes c
+                   ON c.id = e.class_id;
+   name    |      name
+-----------+----------------
+ Penelope  | Cooking Pasta
+ Peter     | Yoga
+ Peter     | Gym
+ Pepe      | Yoga
+ Parth     | How to Guitar
+ Priscilla | How to Guitar
+ Priscilla | Gym
+ Puja      | Singing
+ Puja      | Programming
+ Puja      | English
+ Puja      | Social Studies
+ Patricia  | Social Studies
+ Piper     | Social Studies
+ Piper     | Fruit
+ Paula     | Fruit
+ Paula     | Football
+ Pamela    | Cooking Pasta
+ Pamela    | Yoga
+ Pamela    | Football
+ Pamela    | Calculus
+ Pamela    | Singing
+ Paige     | Calculus
+ Peggy     | Fruit
+ Pedro     | Programming
+ Phoebe    | English
+ Phoebe    | Gym
+ Phoebe    | Cooking Pasta
+ Phoebe    | Cooking Pasta
+ Pajak     | Yoga
+ Pajak     | Calculus
+ Parker    | Social Studies
+ Parker    | English
+ Parker    | Fruit
+ Priyal    | Programming
+ Paxton    | Gym
+ Patrick   | Cooking Pasta
+ Patrick   | Singing
+ Patrick   | How to Guitar
+(37 rows)
+
+##### List all the students and their classes and rename the columns to "student" and "class"
+
+intermediate_sql=# SELECT s.name AS student, c.name AS class FROM students s
+intermediate_sql-# INNER JOIN enrollments e
+intermediate_sql-# ON s.id = e.student_id
+intermediate_sql-# INNER JOIN classes c
+intermediate_sql-# ON c.id = e.class_id;
+  student  |     class
+-----------+----------------
+ Penelope  | Cooking Pasta
+ Peter     | Yoga
+ Peter     | Gym
+ Pepe      | Yoga
+ Parth     | How to Guitar
+ Priscilla | How to Guitar
+ Priscilla | Gym
+ Puja      | Singing
+ Puja      | Programming
+ Puja      | English
+ Puja      | Social Studies
+ Patricia  | Social Studies
+ Piper     | Social Studies
+ Piper     | Fruit
+ Paula     | Fruit
+ Paula     | Football
+ Pamela    | Cooking Pasta
+ Pamela    | Yoga
+ Pamela    | Football
+ Pamela    | Calculus
+ Pamela    | Singing
+ Paige     | Calculus
+ Peggy     | Fruit
+ Pedro     | Programming
+ Phoebe    | English
+ Phoebe    | Gym
+ Phoebe    | Cooking Pasta
+ Pajak     | Yoga
+ Pajak     | Calculus
+ Parker    | Social Studies
+ Parker    | English
+ Parker    | Fruit
+ Priyal    | Programming
+ Paxton    | Gym
+ Patrick   | Cooking Pasta
+ Patrick   | Singing
+ Patrick   | How to Guitar
+(37 rows)
+
+
+
+##### List all the students and their average grade
+
+intermediate_sql=# SELECT s.name AS student, avg(e.grade) AS grade FROM students s
+                   INNER JOIN enrollments e
+                   ON s.id = e.student_id
+                   GROUP BY s.name;
+  student  |        grade
+-----------+---------------------
+ Piper     | 85.5000000000000000
+ Paige     | 55.0000000000000000
+ Pedro     | 86.0000000000000000
+ Peter     | 85.0000000000000000
+ Peggy     | 97.0000000000000000
+ Patricia  | 84.0000000000000000
+ Paula     | 94.0000000000000000
+ Phoebe    | 81.0000000000000000
+ Pamela    | 84.8000000000000000
+ Parker    | 90.0000000000000000
+ Priscilla | 47.5000000000000000
+ Priyal    | 94.0000000000000000
+ Patrick   | 90.6666666666666667
+ Puja      | 77.5000000000000000
+ Paxton    | 84.0000000000000000
+ Pepe      | 74.0000000000000000
+ Penelope  | 60.0000000000000000
+ Pajak     | 76.0000000000000000
+ Parth     | 82.0000000000000000
+(19 rows)
+
+##### List all the students and a count of how many classes they are currently enrolled in
