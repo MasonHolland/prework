@@ -256,5 +256,51 @@ intermediate_sql=# SELECT s.name AS student, avg(e.grade) AS grade FROM students
  Pajak     | 76.0000000000000000
  Parth     | 82.0000000000000000
 (19 rows)
+CREATE TABLE students(id SERIAL, name TEXT);
+
+
 
 ##### List all the students and a count of how many classes they are currently enrolled in
+
+intermediate_sql=#  SELECT s.name student, c.count class_count FROM students s
+intermediate_sql=#  INNER JOIN enrollments e
+intermediate_sql=#  ON s.id = e.student_id
+intermediate_sql=#  INNER JOIN classes c
+intermediate_sql=#  ON c.id = e.class_id
+intermediate_sql-#  GROUP BY s.name;
+  student  | class_count
+-----------+-------------
+ Piper     |           2
+ Paige     |           1
+ Pedro     |           1
+ Peter     |           2
+ Peggy     |           1
+ Patricia  |           1
+ Paula     |           2
+ Phoebe    |           3
+ Pamela    |           5
+ Parker    |           3
+ Priscilla |           2
+ Priyal    |           1
+ Patrick   |           3
+ Puja      |           4
+ Paxton    |           1
+ Pepe      |           1
+ Penelope  |           1
+ Pajak     |           2
+ Parth     |           1
+(19 rows)
+
+
+
+##### List all the students and their class count IF they are in more than 2 classes
+
+
+
+##### List all the teachers for each student
+
+##### List all the teachers for each student grouped by each student
+
+##### Find the average grade for a each class
+
+##### List students' name and their grade IF their grade is lower than the average.
