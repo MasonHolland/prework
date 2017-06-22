@@ -303,6 +303,7 @@ intermediate_sql-#  GROUP BY s.name;
 
 
 
+
 ##### List all the teachers for each student grouped by each student
 
 ##### Find the average grade for a each class
