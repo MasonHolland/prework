@@ -11,7 +11,7 @@ describe "ActiveRecord American Gladiator" do
       items = Item.all
       # Changeable End
 
-      expect(items.count).to eq 3
+      expect(items.count).to eq(3)
     end
   end
 
@@ -22,7 +22,7 @@ describe "ActiveRecord American Gladiator" do
       Item.create(name: "Trap Door")
 
       # Changeable Start
-      items = Item.all
+      items = Item.where(:name).includes("Powerball")
       # Changeable End
 
       expect(items.count).to eq(2)
@@ -163,4 +163,3 @@ describe "ActiveRecord American Gladiator" do
     end
   end
 end
-
